@@ -1,5 +1,5 @@
 === Wordpress Welcome Redirect ===
-Contributors: robertjaneson, shlokjodha, John Wanjohi 
+Contributors: robertjaneson, shlokjodha, John Wanjohi, Samuel Lozano 
 Donate Link: http://latitudemediaz.com/wordpress-welcome-redirect-plugin/
 Tags: Wordpress Welcome Redirect Plugin
 Requires at least: 3.0.1
