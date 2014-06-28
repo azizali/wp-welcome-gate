@@ -1,7 +1,7 @@
 === Wordpress Welcome Redirect ===
-Contributors: robertjaneson, shlokjodha, John Wanjohi, Samuel Lozano 
+Contributors: robertjaneson, shlokjodha, dextraz
 Donate Link: http://latitudemediaz.com/wordpress-welcome-redirect-plugin/
-Tags: Wordpress Welcome Redirect Plugin
+Tags: Wordpress Welcome Redirect Plugin,welcome gate,wordpress, landing page,welcome redirect,wordpress redirection,permalink redirect,Permalink Redirect WordPress Plugin, welcome gate plugin wordpress
 Requires at least: 3.0.1
 Tested up to: 3.8
 Stable tag: trunk
