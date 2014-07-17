@@ -39,7 +39,7 @@ Install Easy Facebook Login just as you would any other WP Plugin:
 
 == Frequently Asked Questions ==
 
-Find more help at the [ Wp-welcome-gate Wiki](http://www.robertjaneson.com/ "Robert Janeson (email: Robert@latitudemediaz.com)")
+Email Robert, the owner at robert@latitudemediaz.com if you have any question.
 
 == Changelog ==
 
