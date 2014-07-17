@@ -1,36 +1,366 @@
-<h3>Saturday, August 30, 2014 / 2:00-5:00 p.m.</h3>
-<b>Performers:</b> 
-Jay Ottaway 2:00-3:00 p.m.
-Sarah Blacker 3:00-4:00 p.m.
-Phil Henry 4:00-5:00 p.m.
-Saturday Night Jam Session 8:00 p.m. Hosted by Jay Ottaway at Frank's Tavern, Ludlow.
-<h3>Sunday, August 31, 2014 / 2:00-5:00 p.m.</h3>
-<b>Performers:</b> 
-Chad Hollister 2:00-3:00 p.m.
-Hayley Jane and the Primates 3:00-4:00 p.m.
-Alastair Moock 4:00-5:00 p.m.
+<?php
 
-<hr />
-<h2>Saturday, August 30, 2014 / 2:00-5:00 p.m.</h2>
-<hr />
+  /**
+   * Wordpress Welcome Redirect
+   * @author Robert Janeson
+   * @package Wordpress-Welcome-Redirect
+   * @version 2.0.1
+   */
 
-<dl><dt><img src="http://www.plymouthfolk.com/wp-content/uploads/2013/07/liz.jpg" alt="#####" width="150" />Jay Ottaway 2:00-3:00 p.m.</dt><dd>Jay Ottaway is an award-winning songwriter/producer who studied songwriting and blues guitar at the Berklee College of Music (Boston) and cut his teeth in Nashville as a singer-songwriter. He has been honored by American Songwriter Magazine, the USA Songwriting, International Songwriting, the U.K. Songwriting, and the Peacedriven Songwriting Contests, in addition to multiple awards from the Berklee College of Music, both as an arranger and a songwriter. He tours throughout Europe and the U.S. with his electric Jay Ottaway Band and in the U.S. as a solo acoustic act. He just released his second CD on the German label Cactus Rock Records entitled “Carry On.” He has co-produced the Plymouth Folk and Blues Festival since 2003. More info: <a href="http://www.jayottaway.com">www.jayottaway.com</a> </dd></dl>
+  /*
+    Plugin Name: Wordpress Welcome Redirect Plugin
+    Version: 2.0.1
+    Plugin URI: http://latitudemediaz.com/wordpress-welcome-redirect-plugin/
+    Description: Redirects your website visitors on their first visit to your landing page or any other special pages of your choice.
+    Author: Robert Janeson
+    Author URI: http://www.robertjaneson.com/
 
-<dl><dt><img src="http://www.plymouthfolk.com/wp-content/uploads/2013/07/bickhardt.jpg" alt="#####" width="150" />Sarah Blacker 3:00-4:00 p.m.</dt><dd>Sarah Blacker was just named Female Performer of the Year by the New England Music Awards. She also recently released her third CD and is receiving extensive airtime on many radio stations in New England. In addition she was the winner of the Radio 92.9 / Boch Subaru contest, named ‘Artist of the Year’ by My Rural Radio in 2011 and was runner up in the Limelight Magazine’s Video of the Year contest for her music video of ‘Knocked the Winds.’ Her music has been featured on MTV shows Jersey Shore and Friendzone and in 2013 she appeared as an emerging artist at the historic Falcon Ridge Folk Festival. Sarah has performed at SXSW, CMJ, as well as a sold-out tour of Germany, and has shared the stage with such artists as America, 10,000 Maniacs, Paula Cole, Sara Bareilles. Her entrancing voice, poignant emotionally charged lyrics, and mature songwriting have her on pace to go nowhere but up. More info: <a href="http://www.sarahblacker.com">www.sarahblacker.com</a></dd></dl>
+    Copyright 2014 Robert Janeson (email: Robert@latitudemediaz.com)
 
-<dl><dt><img src="http://www.plymouthfolk.com/wp-content/uploads/2013/07/danielle.jpg" alt="#####" width="150" />Phil Henry 4:00-5:00 p.m.</dt><dd>Phil Henry is an award-winning singer-songwriter and music educator from Rutland, Vermont. He is that rare contemporary folk artist who will impress you from every direction. There’s his sweet and strong voice, that intricate and flawless guitar work, and songs so rich and sweeping you’ll wish you wrote them yourself. He’s an old-school storyteller who builds songs from a place of honesty, without crossing over into the “too-much-information” of confessional songwriting. He sings his original, contemporary folk songs in coffeehouses, festivals, and house concerts across the Northeast and has showcased on national stages, such as the Kerrville Folk Festival and the Falcon Ridge Folk Festival. Phil has also won top honors in songwriting contests at the Susquehanna Music and Arts Festival and Vermont’s SolarFest. More info: <a href="http://www.philhenryband.com">www.philhenryband.com</a></dd></dl>
+    This program is Created By Robert Janeson and it is all his decision to make it free
+    or sell.This plugin is use for  redirection of first time visitor.This plugin work on cookie concept.
+    This plugin is developed using Advanced Php, javascript & Css.
+  */
 
-<dl><dt><img class="size-full wp-image-158 alignleft" title="Jay Ottaway" src="http://www.plymouthfolk.com/wp-content/uploads/2011/08/JayOttaway-ac.jpg" alt="" width="150" height="225" />Saturday Night Jam Session 8:00 p.m. Hosted by Jay Ottaway</dt><dd>
-Jay Ottaway is an award-winning songwriter/producer who studied songwriting and guitar at the Berklee College of Music (Boston) and cut his teeth in Nashville as a singer-songwriter and producer. He has been honored by American Songwriter Magazine, The USA Songwriting Contest, The International Songwriting Contest, the U.K. Songwriting Contest, and the Peacedriven Songwriting Contest, and many others. He tours throughout Europe and the U.S. with his electric, Jay Ottaway Band, and as a solo acoustic act. He also has co- produced the Plymouth Folk and Blues Fest in Plymouth, Vermont since 2003.</dd></dl>
+  class WP_Welcome_Redirect
+  {
 
-<hr />
+    // Option name to save to database
+    const OPTION_NAME     = 'wpwr-redirects';
+    // Cookie options
+    const COOKIE_NAME     = 'wpwr-visited';
+    const COOKIE_EXPIRES  = 2592000; // 30 days
+    // Metabox name
+    const META_BOX_NAME   = 'wpwr-url';
+    // Set slug
+    const OPTIONS_SLUG    = 'wpwr-options';
 
-<h2>Sunday, August 31, 2014 / 2:00-5:00 p.m.</h2>
+    // Set post types
+    private $postTypes = array('post', 'page');
 
-<hr />
+    function __construct() {
 
-<dl><dt><img src="http://www.plymouthfolk.com/wp-content/uploads/2013/07/chelsea.jpg" alt="#####" width="150" />Chad Hollister 2:00-3:00 p.m.</dt><dd>Vermonter Chad Hollister is a voice for the POSITIVE. Chad’s music is a blend of unique melodies, grooves, lyrics, as well as his positive vision of Life. The music could be described like any of the great bands he has opened for or performed with, such as Bob Dylan, Tom Petty, Blues Traveler, Phish, Paul Simon, Little Feat, and many more. Yet people have also compared his music to Lenny Kravitz, Dave Mathews, Jack Johnson, and John Mayer. His single “Grow,” off his most recent record, has received radio airplay from VT to Colorado on over 120 stations. Through four albums and constant concert tours, Chad is continually finding new ways to connect to fans and spread his vision of American rock and roll from the sea and sand of CA and FL to the mountains of CO and VT. More info: <a href="http://www.chadmusic.com">www.chadmusic.com</a></dd></dl>
+      $this->initActions();
+    }
 
-<dl><dt><img src="http://www.plymouthfolk.com/wp-content/uploads/2013/07/john-sarah.jpg" alt="#####" width="150" />Hayley Jane and the Primates 3:00-4:00 p.m.</dt><dd>Hayley Jane and the Primates are the 2014 New England Music Awards’ Americana/Roots Act of the Year! Their genre-bending sound and live performances have created a serious buzz in the Northeast. The Primates’ music draws inspiration from a variety of styles, including 60s/70s rock and pop, old musical theater, folk, blues, soul, reggae, psychedelic, funk, bluegrass, and country. Their catchy songs have been praised for successfully combining a diverse sound with clever, over-the-top lyrics and Vaudevillian style storytelling. Their on-stage energy, skilled musicianship, theatrics, and group improvisation take you over a landscape of emotion that will leave you wanting more. More info: <a href="http://www.hayleyjaneandtheprimates.com">www.hayleyjaneandtheprimates.com</a></dd></dl>
+    /**
+     * Get redirects 
+     * @return array Redirects
+     */
+    function getRedirects() {
+      // Get option with default []
+      $option = get_option(static::OPTION_NAME, '{}');
+      // Decode and return
+      return json_decode($option, TRUE);
+    }
 
-<dl><dt><img src="http://www.plymouthfolk.com/wp-content/uploads/2013/07/jarrod.jpg" alt="#####" width="150" />Alastair Moock 4:00-5:00 p.m.</dt><dd>Alastair Moock is a GRAMMY-nomiated singer-songwriter based in Boston. Since 1995, he has toured the U.S. and Europe, won top honors at many of the country’s most prestigious songwriting contests, and was nominated for a Boston Music Award for Outstanding Singer/Songwriter of the Year. The Boston Globe calls him “one of the town’s best and most adventurous songwriters” and The Washington Post says “every song is a gem.” Now nearly twenty years into his performing career, Alastair has managed to carve out a unique niche for himself: He is a songwriter committed to celebrating the roots of American music while knocking down the walls between different audiences, genres and musical traditions. In 2013 Alastair released Singing Our Way Through: Songs for the World’s Bravest Kids, an album which grew out of songs co-written with his daughter after she was diagnosed with leukemia in 2012 (she’s now doing great). Since then Moock has campaigned to bring this GRAMMY-nominated project to hospitals, clinics, and camps around the country. More info: <a href="http://www.moock.com">www.moock.com</a></dd></dl>
+    /**
+     * Save redirects
+     * @param array $array Array of redirects
+     */
+    function saveRedirects(array $array) {
+      // Save
+      update_option(static::OPTION_NAME, json_encode($array));
+      // Return
+      return $this;
+    }
+
+    /**
+     * Set a redirect
+     * @param int $pageId Page id
+     * @param string $url URL
+     */
+    function setRedirect($pageId, $url) {
+      // Get redirects
+      $redirects = $this->getRedirects();
+      // Trim
+      $url = trim($url);
+      // If not empty
+      if ($url) {
+        // Make sure it's a valid url
+        if (!$this->isValidUrl($url)) $url = '';
+      }
+      // Set
+      $redirects[$pageId] = $url;
+      // Save
+      return $this->saveRedirects($redirects);
+    }
+
+    /**
+     * Get page redirect url
+     * @param int $pageId Page id
+     * @return string|null Redirect URL or NULL if not set
+     */
+    function pageRedirectUrl($pageId) {
+      // Get redirects
+      $redirects = $this->getRedirects();
+      // Return
+      return isset($redirects[$pageId]) ? $redirects[$pageId] : NULL;
+    }
+
+    /**
+     * Initialize actions
+     */
+    function initActions() {
+
+      add_action('add_meta_boxes', array($this, 'registerMetaBox'));
+      // Admin menu
+      add_action('admin_menu', array($this, 'initOptions'));
+      // On save
+      add_action('save_post', array($this, 'onSave'));
+      // On site initialize
+      add_action('wp_head', array($this, 'initSite'));
+    }
+
+    /**
+     * Initialize options page
+     */
+    function initOptions() {
+
+      add_options_page('Wordpress Welcome Redirect', 'WP Welcome Redirect', 
+                       'manage_options', static::OPTIONS_SLUG, array($this, 'optionsPage'));
+    }
+
+    /**
+     * Options page
+     */
+    function optionsPage() {
+
+      if (isset($_POST['submit']) && $_POST['submit'] == 'Clear All Redirects') {
+        // Clear
+        $this->saveRedirects(array());
+
+      } else {
+        // Set options
+        $options = array(
+          'general-page'=> '*', 
+          'blog-page'=> '0'
+        );
+        foreach ($options as $input=> $pageId) {
+          if (isset($_POST[$input])) {
+            // Set
+            $this->setRedirect($pageId, $_POST[$input]);
+          }
+        }
+      }
+
+      // Load cookie class
+      $this->cookieClass();
+?>
+<div class="wrap">
+  <h2>Wordpress Welcome Redirect Settings</h2>
+  <form method="post" action="options-general.php?page=<?php echo static::OPTIONS_SLUG; ?>">
+    <table class="form-table">
+      <tbody>
+        <tr>
+          <th scope="row">
+            <label for="general-page">General Page Redirect URL</label>
+          </th>
+          <td>
+            <input name="general-page" type="text" id="general-page" value="<?php echo esc_html($this->pageRedirectUrl('*')); ?>" class="regular-text" placeholder="e.g. http://lp.domain.com" />
+            <p class="description">When a visitor visits any page without specific redirect URL, this will be the default redirect URL</p>
+            <p class="description">Leave this option empty if not applicable</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <label for="blog-page">Blog Page Redirect URL</label>
+          </th>
+          <td>
+            <input name="blog-page" type="text" id="blog-page" value="<?php echo esc_html($this->pageRedirectUrl('0')); ?>" class="regular-text" placeholder="e.g. http://lp.domain.com" />
+            <p class="description">When a visitor visits the blog page, this will be the redirect URL to use</p>
+            <p class="description">Leave this option empty if not applicable</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="submit">
+      <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"  />
+      <input onclick="return confirm('This will clear all redirects in all pages including those in specific pages and blog posts\n\nPress OK to proceed');" type="submit" name="submit" id="submit" class="button" value="Clear All Redirects"  />
+      <input onclick="if (confirm('This will clear all cookies for visited pages\n\nPress OK to proceed')){ wpwr_cookie.set('<?php echo static::COOKIE_NAME; ?>', '', -1); alert('Cookies cleared'); }" type="button" class="button" value="Clear Cookies"  />
+    </p>
+  </form>
+</div>
+<?php
+    }
+
+    /**
+     * Initialize all pages
+     */
+    function initSite() {
+
+      if (!is_admin()) {
+        // Get page id
+        $pageId = $this->getPageId();
+        // Page url
+        $redirectUrl = $this->pageRedirectUrl($pageId);
+        // If no redirect url
+        if (!$redirectUrl) {
+          // If there's general url
+          $generalUrl = $this->pageRedirectUrl('*');
+          // Set
+          if ($generalUrl) $redirectUrl = $generalUrl;
+        }
+
+        // Load cookie class
+        $this->cookieClass();
+?>
+<script type="text/javascript">
+  var wpwr_app = {
+    cookieName: '<?php echo addslashes(static::COOKIE_NAME); ?>', 
+    cookieExpires: <?php echo static::COOKIE_EXPIRES; ?>,
+    pageId: '<?php echo $pageId; ?>',
+    redirectUrl: '<?php echo addslashes($redirectUrl); ?>',
+    pagesVisited: function() {
+      var visited = wpwr_cookie.get(this.cookieName);
+      return visited ? visited.split(',') : [];
+    },
+    visited: function() {
+      return (this.pagesVisited().indexOf(this.pageId) >= 0);
+    },
+    visit: function() {
+      if (this.visited()) return this;
+      var visited = this.pagesVisited();
+      visited[visited.length] = this.pageId;
+      wpwr_cookie.set(this.cookieName, visited.join(','), this.cookieExpires);
+      return this;
+    },
+    init: function() {
+      if (!this.visited()) {
+        this.visit();
+        if (this.redirectUrl) window.location = this.redirectUrl;
+      }
+    }
+  };
+  wpwr_app.init();
+</script>
+<?php
+      }
+    }
+
+    /**
+     * JS Cookie class
+     */
+    function cookieClass() {
+?>
+
+<script type="text/javascript">
+  var wpwr_cookie = {
+    all: {},
+    init: function() {
+      var arrCookies = document.cookie.split(';');
+      for (var i in arrCookies) {
+        var arrValue = arrCookies[i].split('=');
+        this.all[arrValue[0].trim()]=this.decode(arrValue[1].trim());
+      }
+    },
+    set: function(name, value, expires) {
+      var cookie = [name+'='+this.encode(value)];
+      if (expires) {
+        var d = new Date();
+        d.setTime(d.getTime() + (expires * 1000));
+        cookie[cookie.length] = 'expires=' + d.toGMTString();
+      }
+      cookie[cookie.length] = 'path=/';
+      document.cookie = cookie.join('; ');
+      return this;
+    },
+    get: function(name) {
+      return this.all[name];
+    },
+    encode: function(str) {
+      return encodeURIComponent((str + '').toString())
+        .replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28')
+        .replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+    },
+    decode: function(str) {
+      return decodeURIComponent((str + '')
+        .replace(/%(?![\da-f]{2})/gi, function() { return '%25'; })
+        .replace(/\+/g, '%20'));
+    }
+  };
+  wpwr_cookie.init();
+</script>
+<?php
+    }
+
+    function registerMetaBox() {
+      // Loop through each post type
+      foreach ($this->postTypes as $postType) {
+        // Add meta box
+        add_meta_box('wpwr-redirect', 'Wordpress Welcome Redirect URL', array($this, 'showMetaBox'), $postType, 'advanced', 'high');
+      }
+    }
+
+    function showMetaBox() {
+      // Get current url
+      $url = $this->pageRedirectUrl(get_the_ID());
+      ?>
+      <input type="text" name="<?php echo static::META_BOX_NAME; ?>" value="<?php echo esc_html($url); ?>" placeholder="Insert redirect URL here (e.g. http://lp.domain.com/)" style="width: 100%" />
+      <br />
+      <p><em>If redirection is not applicable, leave as blank</em></p>
+      <?php
+    }
+
+    /**
+     * Check if post save is on autosave
+     * @return bool True if autosave
+     */
+    function isAutosave() {
+      // Check for autosave constant
+      return defined('DOING_AUTOSAVE') && DOING_AUTOSAVE;
+    }
+
+    /**
+     * Get current page id
+     */
+    function getPageId() {
+
+      if (is_single()) {
+        // Return id immediately (this refers to a single blog post)
+        return get_the_ID();
+      }
+
+      if (!is_single() && is_page()) {
+        // Return id (this refers to a page)
+        return get_the_ID();
+      }
+
+      // If blog page
+      if (is_home()) {
+        // Return 0
+        return 0;
+      }
+      // Return (refers to any page)
+      return '*';
+    }
+
+    function onSave() {
+      // If autosave, exit immediately
+      if ($this->isAutosave()) return $this;
+      // If invalid post type, exit immediately
+      if (!isset($_POST['post_type']) || !in_array($_POST['post_type'], $this->postTypes)) return $this;
+      // Set post id
+      $pageId = isset($_POST['post_ID']) ? intval($_POST['post_ID']) : 0;
+      // If no post id, exit
+      if (!$pageId) return $this;
+      // Get redirect url
+      $redirectUrl = isset($_POST[static::META_BOX_NAME]) ? trim($_POST[static::META_BOX_NAME]) : '';
+      // Set redirect
+      return $this->setRedirect($pageId, $redirectUrl);
+    }
+
+    /**
+     * Check if valid url
+     * @param string $url URL
+     * @return bool True if valid url
+     */
+    function isValidUrl($url) {
+      // Return 
+      return preg_match('/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/', $url);
+    }
+
+  }
+
+  // Instantiate plugin
+  $wpwr = new WP_Welcome_Redirect();
