@@ -226,7 +226,7 @@
       return this;
     },
     init: function() {
-      if (!this.visited()) {
+      if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
         this.visit();
         if (this.redirectUrl) window.location = this.redirectUrl;
       }

@@ -4,7 +4,7 @@ Donate Link: http://latitudemediaz.com/wordpress-welcome-redirect-plugin/
 Tags: Wordpress Welcome Redirect Plugin,welcome gate,wordpress, landing page,welcome redirect,wordpress redirection,permalink redirect,Permalink Redirect WordPress Plugin, welcome gate plugin wordpress
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +43,8 @@ Email Robert, the owner at robert@latitudemediaz.com if you have any question.
 
 == Changelog ==
 
+=2.0.2=
+* Fixed bugs
 = 2.0.1 =
 * Inital Release
 
