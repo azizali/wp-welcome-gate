@@ -45,6 +45,7 @@ Email Robert, the owner at robert@latitudemediaz.com if you have any question.
 
 = 2.0.2 =
 * Fixed bugs
+
 = 2.0.1 =
 * Inital Release
 
