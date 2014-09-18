@@ -4,7 +4,7 @@
    * Wordpress Welcome Redirect
    * @author Robert Janeson
    * @package Wordpress-Welcome-Redirect
-   * @version 2.0.2
+   * @version 2.0.3
    */
 
   /*
