@@ -9,7 +9,7 @@
 
   /*
     Plugin Name: Wordpress Welcome Redirect Plugin
-    Version: 2.0.2
+    Version: 2.0.3
     Plugin URI: http://latitudemediaz.com/wordpress-welcome-redirect-plugin/
     Description: Redirects your website visitors on their first visit to your landing page or any other special pages of your choice.
     Author: Robert Janeson
