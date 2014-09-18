@@ -4,7 +4,7 @@ Donate Link: http://latitudemediaz.com/wordpress-welcome-redirect-plugin/
 Tags: Wordpress Welcome Redirect Plugin,welcome gate,wordpress, landing page,welcome redirect,wordpress redirection,permalink redirect,Permalink Redirect WordPress Plugin, welcome gate plugin wordpress
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,9 @@ Install Easy Facebook Login just as you would any other WP Plugin:
 Email Robert, the owner at robert@latitudemediaz.com if you have any question.
 
 == Changelog ==
+
+= 2.0.3 =
+* Added option so that you can choose to apply redirect effect on whole website, posts only or home page only.
 
 = 2.0.2 =
 * Fixed bugs

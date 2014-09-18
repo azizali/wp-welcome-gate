@@ -34,6 +34,7 @@
     const META_BOX_NAME   = 'wpwr-url';
     // Set slug
     const OPTIONS_SLUG    = 'wpwr-options';
+    const REDIRECT_TYPE    = 'wpwr-type';
 
     // Set post types
     private $postTypes = array('post', 'page');
@@ -142,6 +143,7 @@
             $this->setRedirect($pageId, $_POST[$input]);
           }
         }
+        update_option(static::REDIRECT_TYPE, $_POST['redirect-type']);
       }
 
       // Load cookie class
@@ -170,6 +172,20 @@
             <input name="blog-page" type="text" id="blog-page" value="<?php echo esc_html($this->pageRedirectUrl('0')); ?>" class="regular-text" placeholder="e.g. http://lp.domain.com" />
             <p class="description">When a visitor visits the blog page, this will be the redirect URL to use</p>
             <p class="description">Leave this option empty if not applicable</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <label for="redirects-page">Where do you want to apply redirects?</label>
+          </th>
+          <td>
+            <select name="redirect-type" id="redirect-type" class="regular-text">
+              <option value="website">Entire Website</option>
+              <option value="home">Home Page Only</option>
+              <option value="pages">Pages Only</option>
+              <option value="posts">Posts Only</option>
+            </select>
+            <p class="description">The redirects will work only on the pages or posts you choose here</p>
           </td>
         </tr>
       </tbody>
@@ -226,10 +242,51 @@
       return this;
     },
     init: function() {
-      if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
+      /*if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
         this.visit();
-        if (this.redirectUrl) window.location = this.redirectUrl;
-      }
+              if (this.redirectUrl) window.location = this.redirectUrl;*/
+
+        <?php
+        switch (get_option( static::REDIRECT_TYPE, 'website' )) {
+          case 'website':
+            ?>
+              if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
+                this.visit();
+                if (this.redirectUrl) window.location = this.redirectUrl;
+              }
+            <?php
+            break;
+          case 'home':
+            if (is_home()) { ?>
+              if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
+                this.visit();
+                if (this.redirectUrl) window.location = this.redirectUrl;
+              }
+            <?php }
+            break;
+          case 'pages':
+            //exit(var_dump(is_page()));
+            if (is_page()) { ?>
+              if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
+                this.visit();
+                if (this.redirectUrl) window.location = this.redirectUrl;
+              }
+            <?php }
+            break;
+          case 'posts':
+            if (is_single()) { ?>
+              if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
+                this.visit();
+                if (this.redirectUrl) window.location = this.redirectUrl;
+              }
+            <?php }
+            break;
+          
+          default:
+            break;
+        }
+        ?>
+      /*}*/
     }
   };
   wpwr_app.init();
