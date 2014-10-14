@@ -16,10 +16,11 @@ Redirects your website visitors on their first visit to your landing page or any
 
 **Why Use WordPress Welcome Redirect On Your Website?**
 These are few uses of this plugin.
-* Acquire more subscribers to your email list
-* Get more traffic to your landing pages thus increasing conversions
-* Deliver a message to new visitors to your website
-* Introduce a new product or service to your audience
+
+*	Acquire more subscribers to your email list
+*	Get more traffic to your landing pages thus increasing conversions
+*	Deliver a message to new visitors to your website
+*	Introduce a new product or service to your audience
 
 **Features**
 
