@@ -4,12 +4,12 @@
    * Wordpress Welcome Redirect
    * @author Robert Janeson
    * @package Wordpress-Welcome-Redirect
-   * @version 2.0.3
+   * @version 2.0.4
    */
 
   /*
     Plugin Name: Wordpress Welcome Redirect Plugin
-    Version: 2.0.3
+    Version: 2.0.4
     Plugin URI: http://latitudemediaz.com/wordpress-welcome-redirect-plugin/
     Description: Redirects your website visitors on their first visit to your landing page or any other special pages of your choice.
     Author: Robert Janeson
@@ -111,6 +111,18 @@
       add_action('save_post', array($this, 'onSave'));
       // On site initialize
       add_action('wp_head', array($this, 'initSite'));
+      // Settings link Plugins Page
+      add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array($this, 'wpwr_action_links') );
+      // CSS of Social Media boxes at the bottom
+      function my_enqueue($hook) {
+          if ( 'settings_page_wpwr-options' != $hook ) {
+              return;
+          }
+          wp_enqueue_style('wpwr-social-box', plugin_dir_url(__FILE__)."/css/bootstrap.min.css" );
+          wp_enqueue_style('wpwr-social-box', "http://fonts.googleapis.com/css?family=Noto+Sans:400,700" );
+          wp_enqueue_script('wpwr-social-box', plugin_dir_url(__FILE__)."/js/wp-welcome-gate.js" );
+      }
+      add_action( 'admin_enqueue_scripts', 'my_enqueue' );
     }
 
     /**
@@ -120,6 +132,13 @@
 
       add_options_page('Wordpress Welcome Redirect', 'WP Welcome Redirect', 
                        'manage_options', static::OPTIONS_SLUG, array($this, 'optionsPage'));
+    }
+
+
+    function wpwr_action_links( $links ) {
+       $settings_link1 = '<a href="'. get_admin_url(null, 'options-general.php?page=wpwr-options') .'">Settings</a>';
+       array_unshift( $links, $settings_link1 );
+       return $links;
     }
 
     /**
@@ -156,7 +175,7 @@
       <tbody>
         <tr>
           <th scope="row">
-            <label for="general-page">General Page Redirect URL</label>
+            <label for="general-page">Redirect URL</label>
           </th>
           <td>
             <input name="general-page" type="text" id="general-page" value="<?php echo esc_html($this->pageRedirectUrl('*')); ?>" class="regular-text" placeholder="e.g. http://lp.domain.com" />
@@ -166,26 +185,16 @@
         </tr>
         <tr>
           <th scope="row">
-            <label for="blog-page">Blog Page Redirect URL</label>
-          </th>
-          <td>
-            <input name="blog-page" type="text" id="blog-page" value="<?php echo esc_html($this->pageRedirectUrl('0')); ?>" class="regular-text" placeholder="e.g. http://lp.domain.com" />
-            <p class="description">When a visitor visits the blog page, this will be the redirect URL to use</p>
-            <p class="description">Leave this option empty if not applicable</p>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">
             <label for="redirects-page">Where do you want to apply redirects?</label>
           </th>
           <td>
             <select name="redirect-type" id="redirect-type" class="regular-text">
-              <option value="website">Entire Website</option>
-              <option value="home">Home Page Only</option>
-              <option value="pages">Pages Only</option>
-              <option value="posts">Posts Only</option>
+              <option value="website" <?php echo ( get_option(static::REDIRECT_TYPE) == 'website' ) ? 'selected = "selected"' : ''; ?> >Entire Website</option>
+              <option value="home" <?php echo ( get_option(static::REDIRECT_TYPE) == 'home' ) ? 'selected = "selected"' : ''; ?> >Home Page Only</option>
+              <option value="pages" <?php echo ( get_option(static::REDIRECT_TYPE) == 'pages' ) ? 'selected = "selected"' : ''; ?> >Pages Only</option>
+              <option value="posts" <?php echo ( get_option(static::REDIRECT_TYPE) == 'posts' ) ? 'selected = "selected"' : ''; ?> >Posts Only</option>
             </select>
-            <p class="description">The redirects will work only on the pages or posts you choose here</p>
+            <p class="description">Redirection will affect the part that you choose. The Entire Website, Home Page Only, Pages Only or Posts Only.</p>
           </td>
         </tr>
       </tbody>
@@ -196,6 +205,76 @@
       <input onclick="if (confirm('This will clear all cookies for visited pages\n\nPress OK to proceed')){ wpwr_cookie.set('<?php echo static::COOKIE_NAME; ?>', '', -1); alert('Cookies cleared'); }" type="button" class="button" value="Clear Cookies"  />
     </p>
   </form>
+</div>
+<hr />
+<div class="mt-social-boxes" id="toBeZoomedOut">
+  <div class="container bg-top gradient-bg">
+  <div class="logo-bg"><a href="http://latitudemediaz.com"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/latitudemediaz-logo.png"/></a></div>
+  <div class="row">
+      <div class="col-md-3">
+      <h4 class="text-center text-outline blue-text"><strong><em>Help Keep This Plugin 
+          Free Send Your Donation</em></strong></h4>
+      </div>
+      <div class="col-md-3">
+      <h4 class="text-center text-outline orange-text"><strong><em>Loved It?<br>
+Leave a review</em></strong></h4>
+      </div>
+      <div class="col-md-3">
+      <h4 class="text-center text-outline gray-text"><strong><em>Need Help?<br>
+View Support Forum</em></strong></h4>
+      </div>
+      <div class="col-md-3">
+      <h4 class="text-center text-outline light-blue-text"><strong><em>Get Soical<br>
+With Us</em></strong></h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 box-bg">
+      <div class="col-md-12 top-padding"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/papypal-logo.png"></div>
+      <div class="col-md-12 top-padding text-center">
+      <div class="col-md-12 text-center padding-overall"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/paypal-verified.png"/></div>      
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input name="cmd" type="hidden" value="_s-xclick" />
+      <input name="hosted_button_id" type="hidden" value="MKD6RXA3D8VML" />
+      <input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" type="image" />
+      <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0" />
+      </form>
+      </div>
+      </div>
+      
+      <div class="col-md-3 box-bg">
+      <div class="col-md-12 text-center top-padding bg-img">
+      <div class="review-bg"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/5-star.png"/></div>
+      </div>
+      <div class="col-md-12 text-center">
+      <a href="https://wordpress.org/support/view/plugin-reviews/wp-welcome-gate" class="btn-main">
+          <span class="btn-main-image"><span></span></span>
+                      <span class="btn-main-text">Please
+                      <h4 class="margin-none white-text">Leave Review</h4>
+      </span> 
+    </a>
+      </div>
+      </div>
+      
+      <div class="col-md-3 box-bg">
+      <div class="col-md-12 text-center top-padding wp-support"></div>
+       <div class="col-md-12 text-center">
+      <a href="https://wordpress.org/support/plugin/wp-welcome-gate" class="btn-main02">
+          <span class="btn-main-image02"><span></span></span>
+                      <span class="btn-main-text02">
+                      <h4 class="margin-none white-text">Need Help?</h4>
+                      Contact Us Here </span> 
+    </a>
+      </div>
+      
+      </div>
+      <div class="col-md-3 box-bg text-center padding-top-bottom">
+      <div class="col-md-6 padding-allover"><a href="https://www.facebook.com/Latitudemediaz" target="_blank"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/fb.png"/></a></div>
+      <div class="col-md-6 padding-allover"><a href="https://twitter.com/latitudemediaz" target="_blank"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/twitter.png"/></a></div>
+      <div class="col-md-6 padding-allover"><a href="https://plus.google.com/+LatitudeMediazNairobi" target="_blank"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/google+.png"/></a></div>
+      <div class="col-md-6 padding-allover"><a href="https://www.youtube.com/user/latitudemediaz" target="_blank"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/youtube.png"/></a></div>
+      </div>
+    </div>
+  </div>
 </div>
 <?php
     }
