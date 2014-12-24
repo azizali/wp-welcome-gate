@@ -168,7 +168,7 @@
       // Load cookie class
       $this->cookieClass();
 ?>
-<div class="wrapz">
+<div class="wrap">
   <h2>Wordpress Welcome Redirect Settings</h2>
   <form method="post" action="options-general.php?page=<?php echo static::OPTIONS_SLUG; ?>">
     <table class="form-table">
