@@ -168,7 +168,7 @@
       // Load cookie class
       $this->cookieClass();
 ?>
-<div class="wrap">
+<div class="wrapz">
   <h2>Wordpress Welcome Redirect Settings</h2>
   <form method="post" action="options-general.php?page=<?php echo static::OPTIONS_SLUG; ?>">
     <table class="form-table">
@@ -190,7 +190,8 @@
           <td>
             <select name="redirect-type" id="redirect-type" class="regular-text">
               <option value="website" <?php echo ( get_option(static::REDIRECT_TYPE) == 'website' ) ? 'selected = "selected"' : ''; ?> >Entire Website</option>
-              <option value="home" <?php echo ( get_option(static::REDIRECT_TYPE) == 'home' ) ? 'selected = "selected"' : ''; ?> >Home Page Only</option>
+              <option value="front" <?php echo ( get_option(static::REDIRECT_TYPE) == 'front' ) ? 'selected = "selected"' : ''; ?> >Front Page Only</option>
+              <option value="home" <?php echo ( get_option(static::REDIRECT_TYPE) == 'home' ) ? 'selected = "selected"' : ''; ?> >Home/Blog Page Only</option>
               <option value="pages" <?php echo ( get_option(static::REDIRECT_TYPE) == 'pages' ) ? 'selected = "selected"' : ''; ?> >Pages Only</option>
               <option value="posts" <?php echo ( get_option(static::REDIRECT_TYPE) == 'posts' ) ? 'selected = "selected"' : ''; ?> >Posts Only</option>
             </select>
@@ -212,20 +213,25 @@
   <div class="logo-bg"><a href="http://latitudemediaz.com"><img src="<?php echo plugin_dir_url(__FILE__); ?>/images/latitudemediaz-logo.png"/></a></div>
   <div class="row">
       <div class="col-md-3">
-      <h4 class="text-center text-outline blue-text"><strong><em>Help Keep This Plugin 
-          Free Send Your Donation</em></strong></h4>
+      <h4 class="text-center text-outline blue-text">
+        <strong><em>Help Keep This Plugin Free Send Your Donation</em></strong></h4>
       </div>
       <div class="col-md-3">
-      <h4 class="text-center text-outline orange-text"><strong><em>Loved It?<br>
-Leave a review</em></strong></h4>
+      <h4 class="text-center text-outline orange-text">
+        <strong><em>Loved It?<br>
+        Leave a review</em></strong>
+      </h4>
       </div>
       <div class="col-md-3">
-      <h4 class="text-center text-outline gray-text"><strong><em>Need Help?<br>
-View Support Forum</em></strong></h4>
+      <h4 class="text-center text-outline gray-text">
+        <strong><em>Need Help?<br>
+        View Support Forum</em></strong></h4>
       </div>
       <div class="col-md-3">
-      <h4 class="text-center text-outline light-blue-text"><strong><em>Get Soical<br>
-With Us</em></strong></h4>
+      <h4 class="text-center text-outline light-blue-text">
+        <strong><em>Get Soical<br>
+        With Us</em></strong>
+      </h4>
       </div>
     </div>
     <div class="row">
@@ -250,20 +256,20 @@ With Us</em></strong></h4>
           <span class="btn-main-image"><span></span></span>
                       <span class="btn-main-text">Please
                       <h4 class="margin-none white-text">Leave Review</h4>
-      </span> 
-    </a>
+          </span> 
+      </a>
       </div>
       </div>
       
       <div class="col-md-3 box-bg">
       <div class="col-md-12 text-center top-padding wp-support"></div>
-       <div class="col-md-12 text-center">
-      <a href="https://wordpress.org/support/plugin/wp-welcome-gate" class="btn-main02">
+      <div class="col-md-12 text-center">
+        <a href="https://wordpress.org/support/plugin/wp-welcome-gate" class="btn-main02">
           <span class="btn-main-image02"><span></span></span>
                       <span class="btn-main-text02">
                       <h4 class="margin-none white-text">Need Help?</h4>
                       Contact Us Here </span> 
-    </a>
+        </a>
       </div>
       
       </div>
@@ -337,6 +343,14 @@ With Us</em></strong></h4>
             break;
           case 'home':
             if (is_home()) { ?>
+              if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
+                this.visit();
+                if (this.redirectUrl) window.location = this.redirectUrl;
+              }
+            <?php }
+            break;
+          case 'front':
+            if (is_front_page()) { ?>
               if (typeof(wpwr_cookie.get(this.cookieName)) === 'undefined') {
                 this.visit();
                 if (this.redirectUrl) window.location = this.redirectUrl;
